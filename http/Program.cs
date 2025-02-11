@@ -18,15 +18,15 @@ var host = new HostBuilder()
     .ConfigureServices((context, services) =>
     {
         // Retrieve the connection string from the "ConnectionStrings" section
-        string? connectionString = context.Configuration["ConnectionStrings:PostgresConnectionString"];
+        string? connectionString = context.Configuration["ConnectionStrings:MYSQL_CONNECTION_STRING"];
         if (string.IsNullOrWhiteSpace(connectionString))
         {
-            throw new InvalidOperationException("The 'PostgresConnectionString' connection string is not set.");
+            throw new InvalidOperationException("The 'MYSQL_CONNECTION_STRING' connection string is not set.");
         }
 
         // Register the ApplicationDbContext with the PostgreSQL provider
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(connectionString));
+            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
         // Register telemetry services (as before)
         services.AddApplicationInsightsTelemetryWorkerService();
